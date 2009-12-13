@@ -140,6 +140,41 @@ public class RayTracer {
 		}
 
 		ImageIO.write(image, "bmp", outFile);
+/*
+		final BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
+		ThreadPoolExecutor executor = null;
+		if(Main.MULTI_THREAD) {
+			executor = new ThreadPoolExecutor(8, 8, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		}
+
+		for(int r = 0;r < rows; r++) {
+			for(int c = 0;c < cols; c++) {
+				if(Main.MULTI_THREAD) {
+					final int rr = r;
+					final int cc = c;
+					executor.execute(new Runnable() {
+						public void run() {
+							try {
+								image.setRGB(cc, rr, getPixelColor(cc, rr).getRGB());
+							} catch(IOException ex) {
+								Log.error("Could not getPixelColor for (" + cc + ", " + rr + ")");
+							}
+//							Log.warn("Thread complete " + rr + "," + cc);
+						}
+					});
+//					Log.warn("Ran a thread");
+				} else {
+					image.setRGB(c, r, getPixelColor(c, r).getRGB());
+				}
+			}
+		}
+
+		if(Main.MULTI_THREAD) {
+			executor.shutdown();
+		}
+
+		ImageIO.write(image, "bmp", outFile);
+*/
 	}
 
 
