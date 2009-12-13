@@ -17,8 +17,16 @@ public class RayHit {
 		this.point = ray.getEnd(t);
 	}
 
+	public RayHit(Ray ray, Shape shape, Vector normal, Point intersection) {
+		this.ray = ray;
+		this.shape = shape;
+		this.t = new Vector(ray.origin, intersection).getMagnitude();
+		this.normal = normal.normalize();
+		this.point = intersection;
+	}
+
 	public Ray getReflectionRay() {
-		return null;
+		return new Ray(point, ray.direction.minus(normal.times(2.0*ray.direction.dot(normal))));
 	}
 
 	public Ray getTransmissionRay() {

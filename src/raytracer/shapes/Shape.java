@@ -21,4 +21,8 @@ public abstract class Shape {
 	public Color getColor(Point p) {
 		return pigment.getColor(p);
 	}
+
+	public String toString() {
+		return "sphere";
+	}
 }

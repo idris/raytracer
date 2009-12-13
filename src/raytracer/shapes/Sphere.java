@@ -25,6 +25,7 @@ public class Sphere extends Shape {
 		double tPlus = (-b + Math.sqrt(discriminant)) / 2;
 		double tValue;
 
+		Vector normal;
 		if(tMinus < 0 && tPlus < 0) {
 			// sphere is behind the ray
 			return null;
@@ -32,12 +33,12 @@ public class Sphere extends Shape {
 			// ray origin lies inside the sphere. take tPlus
 			tValue = tPlus;
 //			return null;
+			normal = new Vector(ray.getEnd(tValue), center);
 		} else {
 			// both roots positive. take tMinus
 			tValue = tMinus;
+			normal = new Vector(center, ray.getEnd(tValue));
 		}
-
-		Vector normal = new Vector(center, ray.getEnd(tValue));
 
 		return new RayHit(ray, this, normal, tValue);
 	}

@@ -5,11 +5,6 @@ public class Ray {
 	public final Vector direction;
 	public double t;
 
-	@Deprecated
-	public Ray(Point origin, Vector direction, int col, int row) {
-		this(origin, direction);
-	}
-
 	public Ray(Point origin, Vector direction) {
 		this(origin, direction, true);
 	}

@@ -38,6 +38,10 @@ public class Vector {
 		return new Vector(x + v.x, y + v.y, z + v.z);
 	}
 
+	public Vector minus(Vector v) {
+		return new Vector(x - v.x, y - v.y, z - v.z);
+	}
+
 	public Vector negate() {
 		return times(-1);
 	}

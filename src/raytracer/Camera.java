@@ -1,10 +1,10 @@
 package raytracer;
 
 public class Camera {
-	public Point eye;
-	public Vector vx;
-	public Vector vy;
-	public Vector vz;
+	private Point eye;
+	private Vector vx;
+	private Vector vy;
+	private Vector vz;
 
 	private double windowDistance;
 	private double windowWidth;
@@ -59,7 +59,7 @@ public class Camera {
 		Log.debug("    Window coordinates: (" + x + ", " + y + ")");
 		Log.debug("    Passes through window point: " + v);
 
-		Ray ray = new Ray(eye, v, col, row);
+		Ray ray = new Ray(eye, v);
 		Log.debug("    Final ray: " + ray);
 
 		return ray;

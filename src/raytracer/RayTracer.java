@@ -40,7 +40,11 @@ public class RayTracer {
 		for(int i = 1;i < lights.size();i++) {
 			Log.debug("Checking light " + i + ":");
 			light = lights.get(i);
-			Ray lightRay = new Ray(hit.point, new Vector(hit.point, light.location));
+			Vector lightRayVec = new Vector(hit.point, light.location);
+			Ray lightRay = new Ray(hit.point, lightRayVec);
+			lightRay.t = lightRayVec.getMagnitude();
+
+			Log.debug("  light ray = " + lightRay);
 			RayHit obstruction = findHit(lightRay);
 			if(obstruction == null) {
 				// not in the shadow
@@ -54,12 +58,14 @@ public class RayTracer {
 			}
 		}
 
-		if(hit.shape.finish.isReflective()) {
-//			ColorUtil.blend(color, trace(hit.getReflectionRay(), depth++));
-		}
+		if(depth <= MAX_RECURSION_LEVEL) {
+			if(hit.shape.finish.isReflective()) {
+				ColorUtil.blend(color, ColorUtil.intensify(trace(hit.getReflectionRay(), depth++), hit.shape.finish.refl));
+			}
 
-		if(hit.shape.finish.isTransmittive()) {
-//			ColorUtil.blend(color, trace(hit.getTransmissionRay(), depth++));
+			if(hit.shape.finish.isTransmittive()) {
+				ColorUtil.blend(color, ColorUtil.intensify(trace(hit.getTransmissionRay(), depth++), hit.shape.finish.trans));
+			}
 		}
 
 		return color;
@@ -168,9 +174,9 @@ public class RayTracer {
 		for(int i=0;i<numLights;i++) {
 			Point location = readPoint(scanner);
 			Color color = readColor(scanner);
-			double a = scanner.nextDouble();
-			double b = scanner.nextDouble();
-			double c = scanner.nextDouble();
+			float a = scanner.nextFloat();
+			float b = scanner.nextFloat();
+			float c = scanner.nextFloat();
 			lights.add(new Light(location, color, a, b, c));
 		}
 
@@ -194,7 +200,7 @@ public class RayTracer {
 		// read surface finishes
 		int numFins = scanner.nextInt();
 		for(int i=0;i<numFins;i++) {
-			finishes.add(new Finish(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble()));
+			finishes.add(new Finish(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
 		}
 
 		// read shapes
