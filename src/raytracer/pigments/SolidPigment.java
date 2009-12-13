@@ -1,11 +1,17 @@
 package raytracer.pigments;
 
-import java.awt.*;
+import raytracer.Point;
+
+import java.awt.Color;
 
 public class SolidPigment implements Pigment {
-	private Color color;
+	public Color color;
 
 	public SolidPigment(Color color) {
 		this.color = color;
+	}
+
+	public Color getColor(Point p) {
+		return color;
 	}
 }

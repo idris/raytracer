@@ -1,14 +1,24 @@
 package raytracer.shapes;
 
+import raytracer.*;
 import raytracer.pigments.Finish;
 import raytracer.pigments.Pigment;
 
-public abstract class Shape {
-	Pigment pigment;
-	Finish finish;
+import java.awt.Color;
 
-	public void setMaterial(Pigment pigment, Finish finish) {
+
+public abstract class Shape {
+	public Pigment pigment;
+	public Finish finish;
+
+	public final void setMaterial(Pigment pigment, Finish finish) {
 		this.pigment = pigment;
 		this.finish = finish;
+	}
+
+	public abstract RayHit intersect(Ray ray);
+
+	public Color getColor(Point p) {
+		return pigment.getColor(p);
 	}
 }

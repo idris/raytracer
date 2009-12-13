@@ -1,7 +1,6 @@
 package raytracer.shapes;
 
-import raytracer.Point;
-import raytracer.Vector;
+import raytracer.*;
 
 public class Cylinder extends Shape {
 	private Point base;
@@ -12,5 +11,9 @@ public class Cylinder extends Shape {
 		this.base = base;
 		this.axis = axis;
 		this.radius = radius;
+	}
+
+	public RayHit intersect(Ray ray) {
+		return null;
 	}
 }

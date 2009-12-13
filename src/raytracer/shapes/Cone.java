@@ -1,7 +1,6 @@
 package raytracer.shapes;
 
-import raytracer.Point;
-import raytracer.Vector;
+import raytracer.*;
 
 public class Cone extends Shape {
 	private Point apex;
@@ -12,5 +11,9 @@ public class Cone extends Shape {
 		this.apex = apex;
 		this.axis = axis;
 		this.radius = radius;
+	}
+
+	public RayHit intersect(Ray ray) {
+		return null;
 	}
 }

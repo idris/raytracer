@@ -1,8 +1,7 @@
 package raytracer;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -21,26 +20,29 @@ public class Main {
 			"        -nocap    - cylinders and cones are infinite";
 
 	public static boolean DEBUG = false;
+	public static boolean MULTI_THREAD = false;
 
 
 	private static void printUsage() {
 		System.out.println(USAGE);
 	}
 
-	public static void main(String[] args) throws IOException {
-		if(args.length < 5) {
+	public static void main(String[] args) throws IOException, InterruptedException {
+		if(args.length < 4) {
 			printUsage();
 			System.exit(0);
 		}
 
 		// required arguments
-		File inFile = new File(args[1]);
-		File outFile = new File(args[2]);
-		int cols = Integer.parseInt(args[3]);
-		int rows = Integer.parseInt(args[4]);
+		File inFile = new File(args[0]);
+		File outFile = new File(args[1]);
+		int cols = Integer.parseInt(args[2]);
+		int rows = Integer.parseInt(args[3]);
 
 		// optional arguments
+		int i = 0;
 		for(String arg: args) {
+			if(i++ < 4) continue;
 			if("-test".equals(arg)) {
 				DEBUG = true;
 			} else {
@@ -50,6 +52,14 @@ public class Main {
 
 		RayTracer rayTracer = new RayTracer(cols, rows);
 		rayTracer.readScene(inFile);
-		rayTracer.draw(outFile);
+		if(DEBUG) {
+			Scanner scanner = new Scanner(System.in);
+			System.out.println("Input column and row of pixel (relative to upper left corner):");
+			int col = scanner.nextInt();
+			int row = scanner.nextInt();
+			rayTracer.getPixelColor(col, row);
+		} else {
+			rayTracer.draw(outFile);
+		}
 	}
 }
