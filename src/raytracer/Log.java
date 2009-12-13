@@ -9,6 +9,10 @@ public class Log {
 		System.out.println("Warning: " + msg);
 	}
 
+	public static void info(String msg) {
+		System.out.println(msg);
+	}
+
 	public static void debug(String msg) {
 		if(Main.DEBUG) System.out.println(msg);
 	}

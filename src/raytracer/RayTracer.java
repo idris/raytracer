@@ -140,6 +140,7 @@ public class RayTracer {
 		BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
 
 		for(int r = 0;r < rows; r++) {
+			if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");
 			for(int c = 0;c < cols; c++) {
 				image.setRGB(c, r, getPixelColor(c, r).getRGB());
 			}

@@ -53,11 +53,13 @@ public class Main {
 		RayTracer rayTracer = new RayTracer(cols, rows);
 		rayTracer.readScene(inFile);
 		if(DEBUG) {
-			Scanner scanner = new Scanner(System.in);
-			System.out.println("Input column and row of pixel (relative to upper left corner):");
-			int col = scanner.nextInt();
-			int row = scanner.nextInt();
-			rayTracer.getPixelColor(col, row);
+			while(true) {
+				Scanner scanner = new Scanner(System.in);
+				System.out.println("Input column and row of pixel (relative to upper left corner):");
+				int col = scanner.nextInt();
+				int row = scanner.nextInt();
+				rayTracer.getPixelColor(col, row);
+			}
 		} else {
 			rayTracer.draw(outFile);
 		}
