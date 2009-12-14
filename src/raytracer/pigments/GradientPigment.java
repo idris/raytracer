@@ -23,4 +23,8 @@ public class GradientPigment implements Pigment {
 
 		return ColorUtil.blend(ColorUtil.intensify(start, (float)percent), ColorUtil.intensify(end, 1.0f - (float)percent));
 	}
+
+	public String toString() {
+		return "gradiented";
+	}
 }

@@ -14,4 +14,8 @@ public class SolidPigment implements Pigment {
 	public Color getColor(Point p) {
 		return color;
 	}
+
+	public String toString() {
+		return "solid";
+	}
 }
