@@ -6,12 +6,10 @@ public class ColorUtil {
 	public static Color blend(Color base, Color mixin) {
 		float[] baseC = base.getRGBColorComponents(null);
 		float[] mixinC = mixin.getRGBColorComponents(null);
-//		float[] factorC = factor.getRGBColorComponents(null);
-		float[] factorC = new float[]{1.0f,1.0f,1.0f};
 
-		float red = clamp(baseC[0] + (mixinC[0] * factorC[0]));
-		float green = clamp(baseC[1] + (mixinC[1] * factorC[1]));
-		float blue = clamp(baseC[2] + (mixinC[2] * factorC[2]));
+		float red = clamp(baseC[0] + mixinC[0]);
+		float green = clamp(baseC[1] + mixinC[1]);
+		float blue = clamp(baseC[2] + mixinC[2]);
 		return new Color(red, green, blue);
 	}
 
