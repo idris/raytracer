@@ -9,7 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RayTracer {
 	public static final int MAX_RECURSION_LEVEL = 5;
@@ -123,20 +124,43 @@ public class RayTracer {
 
 
 	public void draw(File outFile) throws IOException, InterruptedException {
-		BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
+		final BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
+		ThreadPoolExecutor executor = new ThreadPoolExecutor(2, 2, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
-		for(int r = 0;r < rows; r++) {
-			if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");
-			for(int c = 0;c < cols; c++) {
-				image.setRGB(c, r, getPixelColor(c, r).getRGB());
+		long start = System.currentTimeMillis();
+
+		if(Main.MULTI_THREAD) {
+			final AtomicInteger remaining = new AtomicInteger(rows * cols);
+			for(int r = 0;r < rows; r++) {
+				for(int c = 0;c < cols; c++) {
+					final int cc = c;
+					final int rr = r;
+					executor.execute(new Runnable() {
+						public void run() {
+							image.setRGB(cc, rr, getPixelColor(cc, rr).getRGB());
+						}
+					});
+				}
+			}
+
+			executor.shutdown();
+			executor.awaitTermination(1, TimeUnit.MINUTES);
+		} else {
+			for(int r = 0;r < rows; r++) {
+				if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");
+				for(int c = 0;c < cols; c++) {
+					image.setRGB(c, r, getPixelColor(c, r).getRGB());
+				}
 			}
 		}
+
+		Log.info("Finished in: " + (System.currentTimeMillis()-start) + "ms");
 
 		ImageIO.write(image, "bmp", outFile);
 	}
 
 
-	public Color getPixelColor(int col, int row) throws IOException {
+	public Color getPixelColor(int col, int row) {
 		int bmpRow = rows-1 - row;
 //		Log.debug("Tracing ray (col=" + col + ", row=" + row + ")");
 //		Log.debug("  [Note: In bmp format this is row " + bmpRow + "]");
@@ -154,8 +178,7 @@ public class RayTracer {
 			return ColorUtil.average(c1, c2, c3, c4);
 		} else {
 			Ray ray = camera.getRay(col, bmpRow);
-			Color color = trace(ray, 0);
-			return color;
+			return trace(ray, 0);
 		}
 	}
 
