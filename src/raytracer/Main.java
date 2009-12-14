@@ -17,9 +17,11 @@ public class Main {
 			"        -noshadow - don't compute shadows\n"+
 			"        -noreflec - don't do reflections\n"+
 			"        -notrans  - don't do transparency\n"+
+			"        -aa       - use anti-aliasing (~4x slower)\n"+
 			"        -nocap    - cylinders and cones are infinite";
 
 	public static boolean DEBUG = false;
+	public static boolean ANTI_ALIAS = false;
 	public static boolean MULTI_THREAD = false;
 
 
@@ -45,6 +47,10 @@ public class Main {
 			if(i++ < 4) continue;
 			if("-test".equals(arg)) {
 				DEBUG = true;
+			} else if("-aa".equals(arg)) {
+				ANTI_ALIAS = true;
+			} else if("-multi".equals(arg)) {
+				MULTI_THREAD = true;
 			} else {
 				System.out.print("Unrecognized option: '" + arg + "' ignored.");
 			}

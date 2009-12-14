@@ -30,4 +30,17 @@ public class ColorUtil {
 
 		return new Color(c[0] * i[0], c[1] * i[1], c[2] * i[2]);
 	}
+
+	public static Color average(Color... colors) {
+		float[] rgb = new float[3];
+		float mult = 1.0f / colors.length;
+		for(Color c: colors) {
+			float[] cc = c.getRGBColorComponents(null);
+			rgb[0] += cc[0] * mult;
+			rgb[1] += cc[1] * mult;
+			rgb[2] += cc[2] * mult;
+		}
+
+		return new Color(rgb[0], rgb[1], rgb[2]);
+	}
 }

@@ -142,9 +142,23 @@ public class RayTracer {
 		int bmpRow = rows-1 - row;
 		Log.debug("Tracing ray (col=" + col + ", row=" + row + ")");
 		Log.debug("  [Note: In bmp format this is row " + bmpRow + "]");
-		Ray ray = camera.getRay(col, bmpRow);
-		Color color = trace(ray, 0);
-		return color;
+
+		if(Main.ANTI_ALIAS) {
+			Ray ray = camera.getRay(col, bmpRow, 0, 0);
+			Color c1 = trace(ray, 0);
+			ray = camera.getRay(col, bmpRow, .5, 0);
+			Color c2 = trace(ray, 0);
+			ray = camera.getRay(col, bmpRow, 0, .5);
+			Color c3 = trace(ray, 0);
+			ray = camera.getRay(col, bmpRow, .5, .5);
+			Color c4 = trace(ray, 0);
+
+			return ColorUtil.average(c1, c2, c3, c4);
+		} else {
+			Ray ray = camera.getRay(col, bmpRow);
+			Color color = trace(ray, 0);
+			return color;
+		}
 	}
 
 
