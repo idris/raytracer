@@ -12,6 +12,28 @@ public class Sphere extends Shape {
 	}
 
 	public RayHit intersect(Ray ray) {
+/*
+		Vector eo = new Vector(ray.origin, center);
+		double v = eo.dot(ray.direction);
+		double disc = radius*radius - (eo.dot(eo) - v*v);
+		if(disc < 0) {
+			return null;
+		} else {
+			double d = Math.sqrt(disc);
+			Point p = ray.origin.plus(ray.direction.times(v - d));
+			Vector normal;
+			if(eo.getMagnitude() > radius) {
+				// outside
+				normal = new Vector(center, p);
+			} else {
+				// inside
+				normal = new Vector(p, center);
+			}
+
+			return new RayHit(ray, this, normal, p);
+		}
+*/
+// /*
 		Point p = ray.origin;
 		Vector u = ray.direction;
 		Vector v = new Vector(center, p);
@@ -23,23 +45,33 @@ public class Sphere extends Shape {
 
 		double tMinus = (-b - Math.sqrt(discriminant)) / 2;
 		double tPlus = (-b + Math.sqrt(discriminant)) / 2;
-		double tValue;
 
-		Vector normal;
 		if(tMinus < 0 && tPlus < 0) {
 			// sphere is behind the ray
 			return null;
-		} else if(tMinus < 0 && tPlus > 0) {
+		}
+
+		double tValue;
+		Vector normal;
+		Point intersection;
+		if(tMinus < 0 && tPlus > 0) {
 			// ray origin lies inside the sphere. take tPlus
 			tValue = tPlus;
 //			return null;
-			normal = new Vector(ray.getEnd(tValue), center);
+			intersection = ray.getEnd(tValue);
+			normal = new Vector(intersection, center);
 		} else {
 			// both roots positive. take tMinus
 			tValue = tMinus;
-			normal = new Vector(center, ray.getEnd(tValue));
+			intersection = ray.getEnd(tValue);
+			normal = new Vector(center, intersection);
 		}
 
-		return new RayHit(ray, this, normal, tValue);
+		return new RayHit(ray, this, normal, intersection);
+//*/
+	}
+
+	public String toString() {
+		return pigment + " sphere";
 	}
 }

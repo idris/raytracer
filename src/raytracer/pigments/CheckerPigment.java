@@ -25,4 +25,8 @@ public class CheckerPigment implements Pigment {
 	private int floor(double d) {
 		return (int)Math.abs(Math.floor(d));
 	}
+
+	public String toString() {
+		return "checkered";
+	}
 }

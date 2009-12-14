@@ -11,11 +11,11 @@ public class Camera {
 	private double windowHeight;
 
 	private double rows, cols;
-	private double fovy, fovx;
+//	private double fovy, fovx;
 
 	public Camera(Point eye, Point center, Vector up, double fovy, int cols, int rows) {
-		this.fovy = fovy = Math.toRadians(fovy);
-		fovx = fovy * cols / rows;
+		fovy = Math.toRadians(fovy);
+		double fovx = fovy * cols / rows;
 
 		Vector at = new Vector(eye, center);
 		vz = at.negate().normalize();
@@ -25,8 +25,6 @@ public class Camera {
 		this.eye = eye;
 //		this.center = center;
 //		this.up = up;
-		this.fovy = fovy;
-		this.fovx = fovy * cols / rows;
 		this.cols = cols;
 		this.rows = rows;
 
@@ -45,15 +43,10 @@ public class Camera {
 	}
 
 	public Ray getRay(int col, int row) {
-		double x = ((double)col / cols) * windowWidth - (windowWidth / 2.0);
-		double y = ((double)row / rows) * windowHeight - (windowHeight / 2.0);
+		double x = (((double)col + 0.5) / cols) * windowWidth - (windowWidth / 2.0);
+		double y = (((double)row + 0.5) / rows) * windowHeight - (windowHeight / 2.0);
 
-		double dz = 1.0;
-		double dy = Math.sin(fovy) * ((y - windowHeight/2.0) / dz);
-		double dx = Math.sin(fovx) * ((x - windowWidth/2.0) / dz);
-
-//		Vector v = vz.times(dz).negate().plus(vy.times(dy)).plus(vx.times(dx));
-		Vector v = new Vector(eye, new Point(x, y, -windowDistance));
+		Vector v = new Vector(eye, convertCoords(new Point(x, y, -windowDistance)));
 
 		Log.debug("  Generating ray:");
 		Log.debug("    Window coordinates: (" + x + ", " + y + ")");
@@ -63,5 +56,42 @@ public class Camera {
 		Log.debug("    Final ray: " + ray);
 
 		return ray;
+	}
+
+	public Point convertCoords(Point p) {
+		Vector v = convertCoords(new Vector(p.x, p.y, p.z));
+		return new Point(v.x, v.y, v.z);
+	}
+
+	public Vector convertCoords(Vector p) {
+		Matrix rT = new Matrix(new double[][]{
+				{vx.x, vy.x, vz.x, 0},
+				{vx.y, vy.y, vz.y, 0},
+				{vx.z, vy.z, vz.z, 0},
+				{0, 0, 0, 1}
+		});
+		Matrix tInv = new Matrix(new double[][]{
+				{1, 0, 0, eye.x},
+				{0, 1, 0, eye.y},
+				{0, 0, 1, eye.z},
+				{0, 0, 0, 1}
+		});
+/*
+		Matrix rT = new Matrix(new double[][]{
+				{vx.x, vx.y, vx.z, 0},
+				{vy.x, vy.y, vy.z, 0},
+				{vz.x, vz.y, vz.z, 0},
+				{0, 0, 0, 1}
+		});
+		Matrix tInv = new Matrix(new double[][]{
+				{1, 0, 0, -eye.x},
+				{0, 1, 0, -eye.y},
+				{0, 0, 1, -eye.z},
+				{0, 0, 0, 1}
+		});
+*/
+		Matrix matrix = tInv.times(rT);
+		Vector v = matrix.times(new Vector(p.x, p.y, p.z));
+		return v;
 	}
 }

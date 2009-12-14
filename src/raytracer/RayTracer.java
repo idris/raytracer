@@ -98,7 +98,7 @@ public class RayTracer {
 		for(Shape shape: shapes) {
 			RayHit h = shape.intersect(ray);
 			Log.debug("    Testing object " + shape + ": " + (h == null?"missed":"hit"));
-			if(h != null && h.t < ray.t + 0.001) {
+			if(h != null && h.t < ray.t) {
 				Log.debug("      hit at t=" + h.t + ". point=" + h.point);
 				hit = h;
 				ray.t = h.t;
@@ -140,7 +140,7 @@ public class RayTracer {
 		BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
 
 		for(int r = 0;r < rows; r++) {
-			if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");
+//			if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");
 			for(int c = 0;c < cols; c++) {
 				image.setRGB(c, r, getPixelColor(c, r).getRGB());
 			}
