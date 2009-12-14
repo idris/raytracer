@@ -34,7 +34,7 @@ public class RayTracer {
 
 		// ambient light source
 		Light light = lights.get(0);
-		if(light != null) {
+		if(light != null && hit.shape.finish.amb > 0) {
 			color = ColorUtil.blend(color, ColorUtil.intensify(hit.shape.getColor(hit.point), light.getColor(hit, null)));
 		}
 
@@ -125,11 +125,11 @@ public class RayTracer {
 
 	public void draw(File outFile) throws IOException, InterruptedException {
 		final BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
-		ThreadPoolExecutor executor = new ThreadPoolExecutor(2, 2, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
 		long start = System.currentTimeMillis();
 
 		if(Main.MULTI_THREAD) {
+			final ThreadPoolExecutor executor = new ThreadPoolExecutor(2, 2, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 			final AtomicInteger remaining = new AtomicInteger(rows * cols);
 			for(int r = 0;r < rows; r++) {
 				for(int c = 0;c < cols; c++) {
@@ -144,7 +144,7 @@ public class RayTracer {
 			}
 
 			executor.shutdown();
-			executor.awaitTermination(1, TimeUnit.MINUTES);
+			executor.awaitTermination(5, TimeUnit.MINUTES);
 		} else {
 			for(int r = 0;r < rows; r++) {
 				if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");

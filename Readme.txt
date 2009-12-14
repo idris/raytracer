@@ -1,6 +1,10 @@
 RayTracer
 by Idris Mokhtarzada
 ------------------------------
+I chose to write this RayTracer in Java because I am more comfortable with 
+Java as a language. Because there are concerns about speed with Java, I added 
+a multi-threaded mode (-multi) to be used when rendering large, anti-aliased 
+images.
 
 Requirements
 ============
@@ -56,5 +60,7 @@ Test Files
 ==========
 Beyond the main test files (test01 - test05), there are some extra tests 
 included to demonstrate extra features:
+* wood.txt  -  Looks very nice with "-aa" option!
+    (uses texture mapping. hardwood.bmp must be in the working directory)
 * test-texmap.txt
-    (uses texture mapping. spectrum.bmp must be in the working directory)
+    (also uses texture mapping. spectrum.bmp must be in the working directory)
