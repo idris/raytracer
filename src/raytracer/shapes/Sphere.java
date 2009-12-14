@@ -71,6 +71,11 @@ public class Sphere extends Shape {
 //*/
 	}
 
+	@Override
+	public boolean contains(Point p) {
+		return new Vector(center, p).getMagnitude() < radius;
+	}
+
 	public String toString() {
 		return pigment + " sphere";
 	}

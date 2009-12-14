@@ -18,7 +18,11 @@ public abstract class Shape {
 
 	public abstract RayHit intersect(Ray ray);
 
-	public Color getColor(Point p) {
+	public boolean contains(Point p) {
+		return false;
+	}
+
+	public final Color getColor(Point p) {
 		return pigment.getColor(p);
 	}
 }
