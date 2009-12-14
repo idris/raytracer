@@ -37,13 +37,13 @@ public class Light {
 		Log.debug("  diff strength = " + diffuseStrength);
 
 		// specular
-		Vector halfway = Vector.halfway(lightRay.direction, hit.ray.direction);
+		Vector halfway = Vector.halfway(lightRay.direction, hit.ray.direction.negate());
 		Log.debug("  halfway vector= " + halfway);
-		Vector r = lightRay.direction.minus(hit.normal.times(2.0*lightRay.direction.dot(hit.normal)));
-//		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.normal.dot(halfway)), hit.shape.finish.shiny);
-		Log.debug("  r             = " + r);
-		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.ray.direction.dot(r)), hit.shape.finish.shiny);
-//		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, lightRay.direction.dot(hit.ray.direction)), hit.shape.finish.shiny);
+		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.normal.dot(halfway)), hit.shape.finish.shiny);
+		// NOTE: the method commented below seems to look better, but the specular points are much smaller, and less spread-out
+//		Vector r = lightRay.direction.minus(hit.normal.times(2.0*lightRay.direction.dot(hit.normal)));
+//		Log.debug("  r             = " + r);
+//		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.ray.direction.dot(r)), hit.shape.finish.shiny);
 		Log.debug("  spec strength = " + specularStrength);
 
 		float[] shapeColor = hit.shape.getColor(hit.point).getRGBColorComponents(null);
