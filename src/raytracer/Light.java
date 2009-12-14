@@ -21,7 +21,7 @@ public class Light {
 	 * @return attenuation factor at distance d
 	 */
 	public float getAttenuationFactor(double d) {
-		return 1.0f / (float)(a + b*c + c*(d*d));
+		return 1.0f / (float)(a + b*d + c*(d*d));
 	}
 
 	public Color getColor(RayHit hit, Ray lightRay) {
