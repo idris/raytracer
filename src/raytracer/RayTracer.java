@@ -35,8 +35,6 @@ public class RayTracer {
 		Light light = lights.get(0);
 		if(light != null) {
 			color = ColorUtil.blend(color, ColorUtil.intensify(hit.shape.getColor(hit.point), light.getColor(hit, null)));
-			if(hit.shape.finish.isReflective()) color = ColorUtil.intensify(color, 1.0f - hit.shape.finish.refl);
-			if(hit.shape.finish.isTransmittive()) color = ColorUtil.intensify(color, 1.0f - hit.shape.finish.trans);
 		}
 
 		for(int i = 1;i < lights.size();i++) {
