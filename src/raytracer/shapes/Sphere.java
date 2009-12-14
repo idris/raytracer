@@ -22,7 +22,7 @@ public class Sphere extends Shape {
 			double d = Math.sqrt(disc);
 			Point p = ray.origin.plus(ray.direction.times(v - d));
 			Vector normal;
-			if(eo.getMagnitude() > radius) {
+			if(eo.magnitude() > radius) {
 				// outside
 				normal = new Vector(center, p);
 			} else {
@@ -54,26 +54,29 @@ public class Sphere extends Shape {
 		double tValue;
 		Vector normal;
 		Point intersection;
+		boolean incoming;
 		if(tMinus < 0 && tPlus > 0) {
 			// ray origin lies inside the sphere. take tPlus
 			tValue = tPlus;
 //			return null;
 			intersection = ray.getEnd(tValue);
 			normal = new Vector(intersection, center);
+			incoming = false;
 		} else {
 			// both roots positive. take tMinus
 			tValue = tMinus;
 			intersection = ray.getEnd(tValue);
 			normal = new Vector(center, intersection);
+			incoming = true;
 		}
 
-		return new RayHit(ray, this, normal, intersection);
+		return new RayHit(ray, this, normal, intersection, incoming);
 //*/
 	}
 
 	@Override
 	public boolean contains(Point p) {
-		return new Vector(center, p).getMagnitude() < radius;
+		return new Vector(center, p).magnitude() < radius;
 	}
 
 	public String toString() {

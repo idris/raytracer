@@ -10,6 +10,8 @@ public class Parallelogram extends Shape {
 		this.p2 = p2;
 		this.p3 = p3;
 		this.p4 = p1.plus(new Vector(p1, p2).plus(new Vector(p1, p3)));
+
+		Log.warn("Parallelogram shape is not supported. This shape will be ignored.");
 	}
 
 	@Override

@@ -11,6 +11,8 @@ public class Cone extends Shape {
 		this.apex = apex;
 		this.axis = axis;
 		this.radius = radius;
+
+		Log.warn("Cone shape is not supported. This shape will be ignored.");
 	}
 
 	public RayHit intersect(Ray ray) {

@@ -1,15 +1,16 @@
 package raytracer.shapes;
 
-import raytracer.Ray;
-import raytracer.RayHit;
+import raytracer.*;
 
 import java.util.List;
 
 public class Polyhedron extends Shape {
-	private List<PolyhedronFace> faces;
+	private List<Polygon> faces;
 
-	public Polyhedron(List<PolyhedronFace> faces) {
+	public Polyhedron(List<Polygon> faces) {
 		this.faces = faces;
+
+		Log.warn("Polyhedron shape is not supported. This shape will be ignored.");
 	}
 
 	@Override

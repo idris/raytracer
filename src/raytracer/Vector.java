@@ -9,6 +9,10 @@ public class Vector {
 		this.z = z;
 	}
 
+	public Vector(Point p) {
+		this(p.x, p.y, p.z);
+	}
+
 	/**
 	 * Create a new vector from point1 to point2.
 	 * @param from
@@ -19,7 +23,7 @@ public class Vector {
 	}
 
 	public Vector normalize() {
-		double magnitude = getMagnitude();
+		double magnitude = magnitude();
 		double divisor;
 		if(magnitude == 0) {
 			Log.error("Trying to normalize a Vector with magnitude 0.");
@@ -30,7 +34,7 @@ public class Vector {
 		return this.times(divisor);
 	}
 
-	public double getMagnitude() {
+	public double magnitude() {
 		return Math.sqrt(this.dot(this));
 	}
 

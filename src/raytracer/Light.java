@@ -26,25 +26,25 @@ public class Light {
 
 	public Color getColor(RayHit hit, Ray lightRay) {
 		double distance = lightRay.origin.distanceTo(location);
-		Log.debug("  distance      = " + distance);
+//		Log.debug("  distance      = " + distance);
 		float attenuationFactor = getAttenuationFactor(distance);
-		Log.debug("  attenuation   = " + attenuationFactor);
+//		Log.debug("  attenuation   = " + attenuationFactor);
 
 		// diffuse
-		Log.debug("  normal vector = " + hit.normal);
-		Log.debug("  light vector  = " + lightRay.direction);
+//		Log.debug("  normal vector = " + hit.normal);
+//		Log.debug("  light vector  = " + lightRay.direction);
 		float diffuseStrength = hit.shape.finish.diff * (float)Math.max(0.0, hit.normal.dot(lightRay.direction));
-		Log.debug("  diff strength = " + diffuseStrength);
+//		Log.debug("  diff strength = " + diffuseStrength);
 
 		// specular
 		Vector halfway = Vector.halfway(lightRay.direction, hit.ray.direction.negate());
-		Log.debug("  halfway vector= " + halfway);
+//		Log.debug("  halfway vector= " + halfway);
 		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.normal.dot(halfway)), hit.shape.finish.shiny);
 		// NOTE: the method commented below seems to look better, but the specular points are much smaller, and less spread-out
 //		Vector r = lightRay.direction.minus(hit.normal.times(2.0*lightRay.direction.dot(hit.normal)));
 //		Log.debug("  r             = " + r);
 //		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.ray.direction.dot(r)), hit.shape.finish.shiny);
-		Log.debug("  spec strength = " + specularStrength);
+//		Log.debug("  spec strength = " + specularStrength);
 
 		float[] shapeColor = hit.shape.getColor(hit.point).getRGBColorComponents(null);
 		float[] intensity = color.getRGBColorComponents(null);
@@ -52,7 +52,7 @@ public class Light {
 		float green = intensity[1] * attenuationFactor * (shapeColor[1] * diffuseStrength + specularStrength);
 		float blue = intensity[2] * attenuationFactor * (shapeColor[2] * diffuseStrength + specularStrength);
 
-		Log.debug("  final color   = (" + red + ", " + green + ", " + blue + ")");
+//		Log.debug("  final color   = (" + red + ", " + green + ", " + blue + ")");
 
 		return new Color(ColorUtil.clamp(red), ColorUtil.clamp(green), ColorUtil.clamp(blue));
 	}

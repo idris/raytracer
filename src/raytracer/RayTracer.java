@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.*;
+import java.util.concurrent.FutureTask;
 
 public class RayTracer {
 	public static final int MAX_RECURSION_LEVEL = 5;
@@ -38,19 +38,19 @@ public class RayTracer {
 		}
 
 		for(int i = 1;i < lights.size();i++) {
-			Log.debug("Checking light " + i + ":");
+//			Log.debug("Checking light " + i + ":");
 			light = lights.get(i);
 			Vector lightRayVec = new Vector(hit.point, light.location);
 			Ray lightRay = new Ray(hit.point, lightRayVec);
-			lightRay.t = lightRayVec.getMagnitude();
+			lightRay.t = lightRayVec.magnitude();
 
-			Log.debug("  light ray = " + lightRay);
+//			Log.debug("  light ray = " + lightRay);
 			RayHit obstruction = findHit(lightRay);
 			if(obstruction == null) {
 				// not in the shadow
 				//              add the basic Phong shading for this light
 				//                (diffuse, specular components)
-				Log.debug("  Light is visible:");
+//				Log.debug("  Light is visible:");
 
 				Color c = light.getColor(hit, lightRay);
 //				Log.debug("  final color   = " + c);
@@ -97,9 +97,9 @@ public class RayTracer {
 
 		for(Shape shape: shapes) {
 			RayHit h = shape.intersect(ray);
-			Log.debug("    Testing object " + shape + ": " + (h == null?"missed":"hit"));
+//			Log.debug("    Testing object " + shape + ": " + (h == null?"missed":"hit"));
 			if(h != null && h.t < ray.t) {
-				Log.debug("      hit at t=" + h.t + ". point=" + h.point);
+//				Log.debug("      hit at t=" + h.t + ". point=" + h.point);
 				hit = h;
 				ray.t = h.t;
 			}
@@ -109,7 +109,7 @@ public class RayTracer {
 	}
 
 	private Color trace(Ray ray, int depth) {
-		Log.debug("Tracing ray " + ray);
+//		Log.debug("Tracing ray " + ray);
 
 		RayHit hit = findHit(ray);
 
@@ -138,8 +138,8 @@ public class RayTracer {
 
 	public Color getPixelColor(int col, int row) throws IOException {
 		int bmpRow = rows-1 - row;
-		Log.debug("Tracing ray (col=" + col + ", row=" + row + ")");
-		Log.debug("  [Note: In bmp format this is row " + bmpRow + "]");
+//		Log.debug("Tracing ray (col=" + col + ", row=" + row + ")");
+//		Log.debug("  [Note: In bmp format this is row " + bmpRow + "]");
 
 		if(Main.ANTI_ALIAS) {
 			Ray ray = camera.getRay(col, bmpRow, 0, 0);
@@ -188,7 +188,13 @@ public class RayTracer {
 			} else if("gradient".equals(name)) {
 				pigments.add(new GradientPigment(readPoint(scanner), readVector(scanner), readColor(scanner), readColor(scanner)));
 			} else if("texmap".equals(name)) {
-				pigments.add(new TexmapPigment(new File(scanner.next()), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble()));
+				File bmpFile = new File(scanner.next());
+				try {
+					pigments.add(new TexmapPigment(bmpFile, scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble()));
+				} catch(IOException ex) {
+					Log.error("Could not locate texmap file '" + bmpFile.getName() + "'.");
+					System.exit(1);
+				}
 			} else {
 				throw new UnsupportedOperationException("Unrecognized pigment: '" + name + "'.");
 			}
@@ -219,9 +225,9 @@ public class RayTracer {
 				shape = new Disc(readPoint(scanner), readVector(scanner), scanner.nextDouble());
 			} else if("polyhedron".equals(name)) {
 				int numFaces = scanner.nextInt();
-				ArrayList<PolyhedronFace> faces = new ArrayList<PolyhedronFace>(numFaces);
+				ArrayList<Polygon> faces = new ArrayList<Polygon>(numFaces);
 				for(int f=0;f<numFaces;f++) {
-					faces.add(new PolyhedronFace(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble()));
+					faces.add(new Polygon(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble()));
 				}
 				shape = new Polyhedron(faces);
 			} else if("triangle".equals(name)) {
@@ -244,7 +250,7 @@ public class RayTracer {
 	}
 
 	private static Color readColor(Scanner scanner) {
-		return new Color(scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat());
+		return new Color(ColorUtil.clamp(scanner.nextFloat()), ColorUtil.clamp(scanner.nextFloat()), ColorUtil.clamp(scanner.nextFloat()));
 	}
 	private static Vector readVector(Scanner scanner) {
 		return new Vector(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble());

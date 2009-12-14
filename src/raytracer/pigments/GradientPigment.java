@@ -15,11 +15,22 @@ public class GradientPigment implements Pigment {
 		this.v = vector;
 		this.start = start;
 		this.end = end;
+
+		Log.warn("Gradient Pigment is not implemented. Start color will be used instead.");
 	}
 
 	public Color getColor(Point p) {
-		double d = new Vector(origin, p).dot(v);
-		double percent = d / v.getMagnitude();
+		if(true) return start;
+
+		double d = Math.abs(new Vector(origin, p).dot(v)) / v.magnitude();
+		double percent = (d / v.magnitude());
+
+//		Log.info("percent: " + d + " / " + v.magnitude() + " = " + percent);
+
+//		percent = Math.abs(percent);
+//		while(percent < 0) percent = 0.0 - percent;
+
+		while(percent >= 1) percent = 1.0 - (percent - 1.0);
 
 		return ColorUtil.blend(ColorUtil.intensify(start, (float)percent), ColorUtil.intensify(end, 1.0f - (float)percent));
 	}

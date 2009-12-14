@@ -9,6 +9,8 @@ public class Bezier extends Shape {
 
 	public Bezier(List<Point> points) {
 		this.points = points;
+
+		Log.warn("Bezier shape is not supported. This shape will be ignored.");
 	}
 
 	@Override

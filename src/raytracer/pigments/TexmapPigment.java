@@ -6,18 +6,15 @@ import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public class TexmapPigment implements Pigment {
 	private BufferedImage image;
 	private int rows, cols;
 	private double sa, sb, sc, sd, ta, tb, tc, td;
 
-	public TexmapPigment(File bmpFile, double sa, double sb, double sc, double sd, double ta, double tb, double tc, double td) {
-		try {
-			image = ImageIO.read(bmpFile);
-		} catch(Exception ex) {
-			throw new RuntimeException("Error loading texmap file " + bmpFile.getName());
-		}
+	public TexmapPigment(File bmpFile, double sa, double sb, double sc, double sd, double ta, double tb, double tc, double td) throws IOException {
+		image = ImageIO.read(bmpFile);
 
 		this.sa = sa;
 		this.sb = sb;

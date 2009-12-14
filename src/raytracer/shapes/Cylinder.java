@@ -11,6 +11,8 @@ public class Cylinder extends Shape {
 		this.base = base;
 		this.axis = axis;
 		this.radius = radius;
+
+		Log.warn("Cylinder shape is not supported. This shape will be ignored.");
 	}
 
 	public RayHit intersect(Ray ray) {

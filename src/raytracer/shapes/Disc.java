@@ -11,6 +11,8 @@ public class Disc extends Shape {
 		this.center = center;
 		this.normal = normal;
 		this.radius = radius;
+
+		Log.warn("Disc shape is not supported. This shape will be ignored.");
 	}
 
 	@Override

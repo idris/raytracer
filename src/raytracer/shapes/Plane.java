@@ -23,6 +23,6 @@ public class Plane extends Shape {
 
 		if(t < 0) return null;
 
-		return new RayHit(ray, this, normal, t);
+		return new RayHit(ray, this, normal, t, true);
 	}
 }
