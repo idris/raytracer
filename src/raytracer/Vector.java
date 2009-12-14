@@ -61,7 +61,7 @@ public class Vector {
 	}
 
 	public static Vector halfway(Vector v1, Vector v2) {
-		return v1.plus(v2).times(0.5).normalize();
+		return v1.plus(v2).normalize();
 	}
 
 	public String toString() {
