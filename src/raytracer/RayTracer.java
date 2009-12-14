@@ -12,7 +12,7 @@ import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class RayTracer {
-	public static final int MAX_RECURSION_LEVEL = 3;
+	public static final int MAX_RECURSION_LEVEL = 5;
 	public static final Color BACKGROUND_COLOR = Color.GRAY;
 
 	private Camera camera;
@@ -34,7 +34,9 @@ public class RayTracer {
 		// ambient light source
 		Light light = lights.get(0);
 		if(light != null) {
-			color = ColorUtil.blend(color, ColorUtil.intensify(hit.shape.getColor(hit.point), light.color));
+			color = ColorUtil.blend(color, ColorUtil.intensify(hit.shape.getColor(hit.point), light.getColor(hit, null)));
+			if(hit.shape.finish.isReflective()) color = ColorUtil.intensify(color, 1.0f - hit.shape.finish.refl);
+			if(hit.shape.finish.isTransmittive()) color = ColorUtil.intensify(color, 1.0f - hit.shape.finish.trans);
 		}
 
 		for(int i = 1;i < lights.size();i++) {
@@ -60,11 +62,11 @@ public class RayTracer {
 
 		if(depth <= MAX_RECURSION_LEVEL) {
 			if(hit.shape.finish.isReflective()) {
-				ColorUtil.blend(color, ColorUtil.intensify(trace(hit.getReflectionRay(), depth++), hit.shape.finish.refl));
+				color = ColorUtil.blend(color, ColorUtil.intensify(trace(hit.getReflectionRay(), depth+1), hit.shape.finish.refl));
 			}
 
 			if(hit.shape.finish.isTransmittive()) {
-				ColorUtil.blend(color, ColorUtil.intensify(trace(hit.getTransmissionRay(), depth++), hit.shape.finish.trans));
+				color = ColorUtil.blend(color, ColorUtil.intensify(trace(hit.getTransmissionRay(), depth+1), hit.shape.finish.trans));
 			}
 		}
 
@@ -119,20 +121,6 @@ public class RayTracer {
 
 		// missed everything. return background color
 		return BACKGROUND_COLOR;
-
-		// Possible Outline:
-		//  if (lev exceeds MAX_LEVEL) return the default color
-		//  int hitObj = -1
-		//  for i = each of the nObjs do
-		//      RayHit h = theShapes[i]->intersect(R)
-		//      if (h.status != MISS && h.tValue < R.tValue)
-		//          hitObj = i
-		//          hit = h
-		//          set R.tValue to h.tValue
-		//  if (hitObj  < 0)
-		//      missed everything, return the default color (e.g., gray)
-		//  else
-		//      return Shade(hitObj, R, hit, lev)
 	}
 
 
@@ -140,7 +128,7 @@ public class RayTracer {
 		BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
 
 		for(int r = 0;r < rows; r++) {
-//			if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");
+			if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");
 			for(int c = 0;c < cols; c++) {
 				image.setRGB(c, r, getPixelColor(c, r).getRGB());
 			}
@@ -172,13 +160,9 @@ public class RayTracer {
 
 		// read lights
 		int numLights = scanner.nextInt();
-		for(int i=0;i<numLights;i++) {
-			Point location = readPoint(scanner);
-			Color color = readColor(scanner);
-			float a = scanner.nextFloat();
-			float b = scanner.nextFloat();
-			float c = scanner.nextFloat();
-			lights.add(new Light(location, color, a, b, c));
+		if(numLights > 0) lights.add(new AmbientLight(readPoint(scanner), readColor(scanner), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
+		for(int i=1;i<numLights;i++) {
+			lights.add(new Light(readPoint(scanner), readColor(scanner), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
 		}
 
 		// read pigments

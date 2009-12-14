@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class Light {
 	public final Point location;
-	public final Color color;
+	protected final Color color;
 	final float a, b, c;
 
 	public Light(Point location, Color color, float a, float b, float c) {
@@ -21,7 +21,7 @@ public class Light {
 	 * @return attenuation factor at distance d
 	 */
 	public float getAttenuationFactor(double d) {
-		return 1 / (float)(a + b*c + c*(d*d));
+		return 1.0f / (float)(a + b*c + c*(d*d));
 	}
 
 	public Color getColor(RayHit hit, Ray lightRay) {
@@ -37,15 +37,17 @@ public class Light {
 		Log.debug("  diff strength = " + diffuseStrength);
 
 		// specular
-		Vector halfway = Vector.halfway(hit.ray.direction, lightRay.direction);
+		Vector halfway = Vector.halfway(lightRay.direction, hit.ray.direction);
 		Log.debug("  halfway vector= " + halfway);
 		Vector r = lightRay.direction.minus(hit.normal.times(2.0*lightRay.direction.dot(hit.normal)));
+//		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.normal.dot(halfway)), hit.shape.finish.shiny);
 		Log.debug("  r             = " + r);
 		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.ray.direction.dot(r)), hit.shape.finish.shiny);
+//		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, lightRay.direction.dot(hit.ray.direction)), hit.shape.finish.shiny);
 		Log.debug("  spec strength = " + specularStrength);
 
-		float[] shapeColor = hit.shape.getColor(hit.point).getRGBColorComponents(new float[3]);
-		float[] intensity = color.getRGBColorComponents(new float[3]);
+		float[] shapeColor = hit.shape.getColor(hit.point).getRGBColorComponents(null);
+		float[] intensity = color.getRGBColorComponents(null);
 		float red = intensity[0] * attenuationFactor * (shapeColor[0] * diffuseStrength + specularStrength);
 		float green = intensity[1] * attenuationFactor * (shapeColor[1] * diffuseStrength + specularStrength);
 		float blue = intensity[2] * attenuationFactor * (shapeColor[2] * diffuseStrength + specularStrength);

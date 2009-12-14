@@ -20,12 +20,13 @@ public class ColorUtil {
 	}
 
 	public static Color intensify(Color color, float intensity) {
-		return intensify(color, new Color(intensity, intensity, intensity));
+		// TODO: clamp should not be necessary here
+		return intensify(color, new Color(clamp(intensity), clamp(intensity), clamp(intensity)));
 	}
 
 	public static Color intensify(Color color, Color intensity) {
-		float[] c = color.getRGBColorComponents(new float[3]);
-		float[] i = intensity.getRGBColorComponents(new float[3]);
+		float[] c = color.getRGBColorComponents(null);
+		float[] i = intensity.getRGBColorComponents(null);
 
 		return new Color(c[0] * i[0], c[1] * i[1], c[2] * i[2]);
 	}

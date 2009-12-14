@@ -22,7 +22,6 @@ public class Plane extends Shape {
 		double t = - (a * ray.origin.x + b * ray.origin.y + c * ray.origin.z + d) / denominator;
 
 		if(t < 0) return null;
-		if(true) return null;
 
 		return new RayHit(ray, this, normal, t);
 	}
