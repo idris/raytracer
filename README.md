@@ -34,7 +34,7 @@ Maven will create a `target` directory with the runnable JAR inside.
 
 If you want to compile manually, you can simply type the following:
 
-`javac src/raytracer/*.java src/raytracer/pigments/*.java src/raytracer/shapes/*.java`
+`javac src/main/java/com/github/idris/raytracer/*.java src/main/java/com/github/idris/raytracer/pigments/*.java src/main/java/com/github/idris/raytracer/shapes/*.java`
 
 ## Usage ##
 
@@ -45,11 +45,17 @@ Simply run the JAR from the command line:
 The wildcard is a convenience to not hardcode the application version into the command
 ( instead of, for example `java -jar target/raytracer-0.1-SNAPSHOT.jar` )
 
+### Make ###
+
+A Makefile is included with the project, which will compile the Java source.
+
+Use `make` to compile, and `make clean` to remove the compiled .class files.
+
 ### Manual build ###
 
 After building, you can simply run the application using java as follows:
 
-`java -cp src raytracer.Main <args>`
+`java -cp src/main/java/ com.github.idris.raytracer.Main`
 
 ## Command line arguments ##
 

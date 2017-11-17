@@ -1,8 +1,10 @@
 JAVAC = javac
 JFLAGS = 
 
+ROOT_PACKAGE = 'src/main/java/com/github/idris/raytracer'
+
 all:
-	$(JAVAC) $(JFLAGS) src/raytracer/*.java src/raytracer/pigments/*.java src/raytracer/shapes/*.java
+	$(JAVAC) $(JFLAGS) $(ROOT_PACKAGE)/*.java $(ROOT_PACKAGE)/pigments/*.java $(ROOT_PACKAGE)/shapes/*.java
 
 clean:
-	$(RM) src/raytracer/*.class src/raytracer/pigments/*.class src/raytracer/shapes/*.class
+	$(RM) $(ROOT_PACKAGE)/*.class $(ROOT_PACKAGE)/*.class $(ROOT_PACKAGE)/*.class
