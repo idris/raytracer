@@ -86,9 +86,26 @@ Extra Features:
 ## Test Files ##
 
 Beyond the main test files (test01 - test05), there are some extra tests
-included to demonstrate extra features:
+included in the `samples` directory to demonstrate extra features:
 
 * wood.txt  -  Looks very nice with "-aa" option!
     (uses texture mapping. hardwood.bmp must be in the working directory)
 * test-texmap.txt
     (also uses texture mapping. spectrum.bmp must be in the working directory)
+
+> Note: Samples using textures only work when ran from the project root.
+> This will work:
+
+```bash
+foo@bar MINGW64 ~/dev/raytracer (master)
+λ java -jar target/raytracer-0.1-SNAPSHOT.jar samples/wood.txt out.bmp 640 360 -multi -aa
+Finished in: 4202ms
+```
+
+> This wont':
+
+```bash
+foo@bar MINGW64 ~/dev/raytracer/samples (master)
+λ java -jar ../target/raytracer-0.1-SNAPSHOT.jar wood.txt out.bmp 640 360 -multi -aa
+ERROR: Could not locate texmap file 'hardwood.bmp'.
+```

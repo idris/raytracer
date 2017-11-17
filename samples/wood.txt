@@ -12,7 +12,7 @@
 solid      1.0  0.0  0.0
 solid      0.0  0.6  0.0
 solid      0.0  0.0  1.0
-texmap hardwood.bmp
+texmap samples/hardwood.bmp
        .5   0   0   0
         0  .5   0   0
 solid      0.1  0.8  1.0

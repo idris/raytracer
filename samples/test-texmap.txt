@@ -9,7 +9,7 @@
 -80.0 160.0 -200.0   1  1  1    1  0  0
 
 3
-texmap       spectrum.bmp
+texmap       samples/spectrum.bmp
                 0 .001   0   .12
                 0    0   0   0
 checker      .08  .25  .20     .93  .83  .82    40
